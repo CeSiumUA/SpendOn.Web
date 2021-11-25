@@ -10,6 +10,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
+import { AppMaterialModule } from './app-material.module';
+import { ApifetcherService } from 'src/services/apifetcher.service';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,11 +22,12 @@ import { HomeComponent } from './home/home.component';
     HomeComponent
   ],
   imports: [
+    AppMaterialModule,
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
     BrowserAnimationsModule,
-    MatFormFieldModule,
-    MatIconModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable
@@ -30,7 +35,7 @@ import { HomeComponent } from './home/home.component';
       registrationStrategy: 'registerWhenStable:30000'
     })
   ],
-  providers: [],
+  providers: [ApifetcherService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

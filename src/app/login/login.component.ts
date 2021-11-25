@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ApifetcherService } from 'src/services/apifetcher.service';
+import { LoginRequest } from '../../models/login.request';
 
 @Component({
   selector: 'app-login',
@@ -8,7 +10,20 @@ import { Component, OnInit } from '@angular/core';
 export class LoginComponent implements OnInit {
 
   public hide = true;
-  constructor() { }
+  public userName: string = '';
+  public password: string = '';
+
+  constructor(private apifetcherService: ApifetcherService) {
+
+  }
+
+  login(){
+    const loginRequest: LoginRequest = {
+      UserName: this.userName,
+      Password: this.password
+    }
+    this.apifetcherService.login(loginRequest)
+  }
 
   ngOnInit(): void {
   }
