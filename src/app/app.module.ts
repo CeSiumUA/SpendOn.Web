@@ -14,12 +14,14 @@ import { AppMaterialModule } from './app-material.module';
 import { ApifetcherService } from 'src/services/apifetcher.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { AddTransactionDialogComponent } from './dialogs/add.transaction.dialog/add.transaction.dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    AddTransactionDialogComponent
   ],
   imports: [
     AppMaterialModule,
