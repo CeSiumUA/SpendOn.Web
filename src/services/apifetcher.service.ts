@@ -3,8 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Category } from '../models/category';
 import { LoginRequest } from '../models/login.request';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AuthToken } from '../models/auth.token';
+import { map } from 'rxjs/operators'
 
 @Injectable({
   providedIn: 'root'
@@ -24,15 +25,17 @@ export class ApifetcherService {
       localStorage.setItem('categories', JSON.stringify(reslt))
     })
   }
-  login(loginRequest: LoginRequest) {
-    this.httpClient.post(`${environment.apiUrl}/login`, loginRequest, {headers: this.headers}).subscribe(result => {
-      localStorage.setItem('authToken', JSON.stringify(result))
-    })
+  login(loginRequest: LoginRequest): Observable<void> {
+    return this.httpClient.post(`${environment.apiUrl}/login`, loginRequest, {headers: this.headers}).pipe(map((data: any, index: number) => {
+      if(data !== null && data !== undefined){
+        localStorage.setItem('authToken', JSON.stringify(data))
+      }
+    }))
   }
   checkAuth(): Observable<Object> {
     const localStorageValue = localStorage.getItem('authToken')
     const authToken: AuthToken = localStorageValue === null ? {Token: ''} : JSON.parse(localStorageValue);
-    this.headers = this.headers.append('Token', authToken.Token)
+    this.headers = this.headers.set('Token', authToken.Token)
     return this.httpClient.get(`${environment.apiUrl}/checkauth`, {headers: this.headers});
   }
 }

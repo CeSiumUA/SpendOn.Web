@@ -12,9 +12,10 @@
                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
         </mat-form-field>
+        <p style="text-align: center; color: red; ">{{error}}</p>
     </mat-card-content>
     <mat-card-actions>
-        <button mat-icon-button style="left: 45%" (click)="login()">
+        <button mat-icon-button style="width: 100%;" (click)="login()">
             Login
             <mat-icon>login</mat-icon>
         </button>
