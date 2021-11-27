@@ -1,1 +1,7 @@
 <router-outlet></router-outlet>
+<button *ngIf="isOffline" style="position: fixed; width: 100%; bottom: 0px;" mat-flat-button color="accent">
+    Offline
+    <mat-icon>
+        refresh
+    </mat-icon>
+</button>

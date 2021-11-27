@@ -13,10 +13,18 @@ import { AddTransactionModel } from '../models/add.transaction';
 })
 export class ApifetcherService {
 
+  public IsOnline: boolean = window.navigator.onLine
+
   headers = new HttpHeaders();
   constructor(private httpClient: HttpClient) {
     this.fetchCategories()
     this.headers = this.headers.set('Content-Type', 'application/json; charset=utf-8');
+    window.addEventListener('online', () => {
+      this.IsOnline = true
+    });
+    window.addEventListener('offline', () => {
+      this.IsOnline = false
+    });
   }
   getCategories(): Category[] {
     return localStorage['categories']
@@ -40,6 +48,11 @@ export class ApifetcherService {
   bulkAddTransactions(transactions: AddTransactionModel[]): Observable<Object> {
     this.setToken()
     return this.httpClient.post(`${environment.apiUrl}/bulkadd`, transactions, { headers: this.headers})
+  }
+  bulkAddStoredTransactions(): Observable<Object> {
+    this.setToken()
+    const transactions: AddTransactionModel[] = JSON.parse(localStorage.getItem('transactions') ?? '[]')
+    return this.bulkAddTransactions(transactions)
   }
   private setToken(): void{
     const localStorageValue = localStorage.getItem('authToken')
