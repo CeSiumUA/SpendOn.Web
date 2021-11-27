@@ -13,7 +13,7 @@ import { HomeComponent } from './home/home.component';
 import { AppMaterialModule } from './app-material.module';
 import { ApifetcherService } from 'src/services/apifetcher.service';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddTransactionDialogComponent } from './dialogs/add.transaction.dialog/add.transaction.dialog.component';
 
 @NgModule({
@@ -29,6 +29,7 @@ import { AddTransactionDialogComponent } from './dialogs/add.transaction.dialog/
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,

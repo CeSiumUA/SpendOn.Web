@@ -1,1 +1,22 @@
-<p>dialog works!</p>
+<mat-form-field>
+    <mat-label>Amount</mat-label>
+    <input type="number" placeholder="0" [(ngModel)]="amount" matInput>
+    <span matPrefix>₴&nbsp;</span>
+</mat-form-field>
+<mat-form-field>
+    <mat-label>Select</mat-label>
+    <mat-select [(ngModel)]="category">
+        <mat-option *ngFor="let cat of categories" [value]="cat.Id">{{cat.Name}}</mat-option>
+    </mat-select>
+</mat-form-field>
+<mat-form-field>
+    <mat-label>Choose day</mat-label>
+    <input matInput [matDatepicker]="picker" [formControl]="spentAt">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
+<mat-form-field>
+    <mat-label>Note</mat-label>
+    <textarea matInput [(ngModel)]="noteText"></textarea>
+</mat-form-field>
+<button style="width: 100%;" mat-flat-button color="primary" (click)="addTransaction()">Add</button>
