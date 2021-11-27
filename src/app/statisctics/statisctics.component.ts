@@ -16,22 +16,12 @@ export class StatiscticsComponent implements OnInit {
   categorySummaries: CategoryStat[] = [];
   categoriesMapping: Category[] = [];
 
-  lineChartOptions: ChartOptions = {
-    responsive: true,
-    
-  }
-
   polarChartLegend = true;
   lineChartType: ChartType = 'polarArea';
 
-  get chartDataSet(): SingleDataSet {
-    return this.categorySummaries.map(x => x.Sum);
-  }
+  chartDataSet: ChartDataSets[] = [];
 
-  get chartDataLabels(): Label[] {
-    const labels = this.categorySummaries.map(x => this.categoriesMapping.filter(y => y.Id == x.CategoryId)[0].Name);
-    return labels;
-  }
+  chartDataLabels: Label[] = [];
 
   constructor(private apiFetcherService: ApifetcherService) {
 
@@ -41,6 +31,8 @@ export class StatiscticsComponent implements OnInit {
     this.categoriesMapping = this.apiFetcherService.getCategories()
     this.apiFetcherService.getStatistics().subscribe(rslt => {
       this.categorySummaries = rslt;
+      this.chartDataSet = [{data: this.categorySummaries.map(x => x.Sum), label: 'Main'}];
+      this.chartDataLabels = this.categorySummaries.map(x => this.categoriesMapping.filter(y => y.Id == x.CategoryId)[0].Name);
     });
     /*this.apiFetcherService.getFilteredTransactions().subscribe(rslt => {
       this.loadedTransactions = rslt
