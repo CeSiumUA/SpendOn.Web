@@ -16,12 +16,15 @@ export class AuthGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.apiFetcher.checkAuth().pipe(map((data: any, index: number) => {
-      return true;
-    }), catchError(err => {
-      this.router.navigate(['/login']);
-      return of(false)
-    }))
+      if(!this.apiFetcher.IsOnline){
+        return true
+      }
+      return this.apiFetcher.checkAuth().pipe(map((data: any, index: number) => {
+        return true;
+      }), catchError(err => {
+        this.router.navigate(['/login']);
+        return of(false)
+      }))
   }
   
 }
