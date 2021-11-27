@@ -17,7 +17,7 @@ export class StatiscticsComponent implements OnInit {
   categoriesMapping: Category[] = [];
 
   polarChartLegend = true;
-  lineChartType: ChartType = 'polarArea';
+  lineChartType: ChartType = 'radar';
 
   chartDataSet: ChartDataSets[] = [];
 
