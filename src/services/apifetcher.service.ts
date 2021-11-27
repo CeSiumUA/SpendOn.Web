@@ -7,6 +7,7 @@ import { Observable, of } from 'rxjs';
 import { AuthToken } from '../models/auth.token';
 import { map } from 'rxjs/operators'
 import { AddTransactionModel } from '../models/add.transaction';
+import { StoredTransactionModel } from '../models/stored.transaction';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +54,10 @@ export class ApifetcherService {
     this.setToken()
     const transactions: AddTransactionModel[] = JSON.parse(localStorage.getItem('transactions') ?? '[]')
     return this.bulkAddTransactions(transactions)
+  }
+  getFilteredTransactions(): Observable<any> {
+    this.setToken()
+    return this.httpClient.post(`${environment}/fetchtransactions`, {}, {headers: this.headers})
   }
   private setToken(): void{
     const localStorageValue = localStorage.getItem('authToken')

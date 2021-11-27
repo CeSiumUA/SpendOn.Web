@@ -15,13 +15,16 @@ import { ApifetcherService } from 'src/services/apifetcher.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddTransactionDialogComponent } from './dialogs/add.transaction.dialog/add.transaction.dialog.component';
+import { ChartsModule } from 'ng2-charts';
+import { StatiscticsComponent } from './statisctics/statisctics.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HomeComponent,
-    AddTransactionDialogComponent
+    AddTransactionDialogComponent,
+    StatiscticsComponent
   ],
   imports: [
     AppMaterialModule,
@@ -30,6 +33,7 @@ import { AddTransactionDialogComponent } from './dialogs/add.transaction.dialog/
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    ChartsModule,
     BrowserAnimationsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
