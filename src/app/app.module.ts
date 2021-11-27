@@ -15,8 +15,8 @@ import { ApifetcherService } from 'src/services/apifetcher.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddTransactionDialogComponent } from './dialogs/add.transaction.dialog/add.transaction.dialog.component';
-import { ChartsModule } from 'ng2-charts';
 import { StatiscticsComponent } from './statisctics/statisctics.component';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [

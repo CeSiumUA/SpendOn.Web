@@ -28,7 +28,7 @@ export class ApifetcherService {
     });
   }
   getCategories(): Category[] {
-    return localStorage['categories']
+    return JSON.parse(localStorage.getItem('categories') ?? '[]')
   }
   fetchCategories(){
     this.httpClient.get(`${environment.apiUrl}/getcategories`, {headers: this.headers}).subscribe(reslt => {
@@ -57,7 +57,11 @@ export class ApifetcherService {
   }
   getFilteredTransactions(): Observable<any> {
     this.setToken()
-    return this.httpClient.post(`${environment}/fetchtransactions`, {}, {headers: this.headers})
+    return this.httpClient.post(`${environment.apiUrl}/fetchtransactions`, {}, {headers: this.headers})
+  }
+  getStatistics(): Observable<any> {
+    this.setToken()
+    return this.httpClient.post(`${environment.apiUrl}/getcategoriesstats`, {}, { headers: this.headers })
   }
   private setToken(): void{
     const localStorageValue = localStorage.getItem('authToken')
