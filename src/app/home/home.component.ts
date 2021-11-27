@@ -27,11 +27,13 @@ export class HomeComponent implements OnInit {
 
   uploadStoredTransactions(): void{
     const transactions: AddTransactionModel[] = JSON.parse(localStorage.getItem('transactions') ?? '[]')
-    this.fetcherService.bulkAddTransactions(transactions).subscribe(result => {
-      this.matSnackBar.open('Uploaded successfully!', 'Ok', {duration: 2000})
-      localStorage.removeItem('transactions')
-    }, err => {
-      this.matSnackBar.open('Upload failed!', 'Ok', {duration: 2000})
-    });
+    if(transactions.length > 0){
+      this.fetcherService.bulkAddTransactions(transactions).subscribe(result => {
+        this.matSnackBar.open('Uploaded successfully!', 'Ok', {duration: 2000})
+        localStorage.removeItem('transactions')
+      }, err => {
+        this.matSnackBar.open('Upload failed!', 'Ok', {duration: 2000})
+      });
+    }
   }
 }
