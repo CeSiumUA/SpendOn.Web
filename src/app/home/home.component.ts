@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AddTransactionModel } from 'src/models/add.transaction';
+import { ApifetcherService } from 'src/services/apifetcher.service';
 import { AddTransactionDialogComponent } from '../dialogs/add.transaction.dialog/add.transaction.dialog.component';
 
 @Component({
@@ -9,7 +12,7 @@ import { AddTransactionDialogComponent } from '../dialogs/add.transaction.dialog
 })
 export class HomeComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private fetcherService: ApifetcherService, private matSnackBar: MatSnackBar) { }
 
   ngOnInit(): void {
   }
@@ -18,8 +21,17 @@ export class HomeComponent implements OnInit {
     const dialogRef = this.dialog.open(AddTransactionDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
-
+      this.uploadStoredTransactions();
     });
   }
 
+  uploadStoredTransactions(): void{
+    const transactions: AddTransactionModel[] = JSON.parse(localStorage.getItem('transactions') ?? '[]')
+    this.fetcherService.bulkAddTransactions(transactions).subscribe(result => {
+      this.matSnackBar.open('Uploaded successfully!', 'Ok', {duration: 2000})
+      localStorage.removeItem('transactions')
+    }, err => {
+      this.matSnackBar.open('Upload failed!', 'Ok', {duration: 2000})
+    });
+  }
 }

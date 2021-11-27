@@ -6,6 +6,7 @@ import { LoginRequest } from '../models/login.request';
 import { Observable, of } from 'rxjs';
 import { AuthToken } from '../models/auth.token';
 import { map } from 'rxjs/operators'
+import { AddTransactionModel } from '../models/add.transaction';
 
 @Injectable({
   providedIn: 'root'
@@ -33,9 +34,16 @@ export class ApifetcherService {
     }))
   }
   checkAuth(): Observable<Object> {
+    this.setToken()
+    return this.httpClient.get(`${environment.apiUrl}/checkauth`, {headers: this.headers});
+  }
+  bulkAddTransactions(transactions: AddTransactionModel[]): Observable<Object> {
+    this.setToken()
+    return this.httpClient.post(`${environment.apiUrl}/bulkadd`, transactions, { headers: this.headers})
+  }
+  private setToken(): void{
     const localStorageValue = localStorage.getItem('authToken')
     const authToken: AuthToken = localStorageValue === null ? {Token: ''} : JSON.parse(localStorageValue);
     this.headers = this.headers.set('Token', authToken.Token)
-    return this.httpClient.get(`${environment.apiUrl}/checkauth`, {headers: this.headers});
   }
 }
