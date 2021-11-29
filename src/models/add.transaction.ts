@@ -1,6 +1,6 @@
 export interface AddTransactionModel{
-    amount: number
-    spentAt: string
-    note?: string
-    categoryId: number
+    Amount: number
+    SpentAt: string
+    Note?: string
+    CategoryId: number
 }

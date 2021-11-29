@@ -22,10 +22,10 @@ export class AddTransactionDialogComponent implements OnInit {
   addTransaction(): void{
     const storedTransactions: AddTransactionModel[] = JSON.parse(localStorage.getItem('transactions') ?? '[]')
     const newTransaction: AddTransactionModel = {
-      amount: this.amount ?? 0,
-      spentAt: this.spentAt.value,
-      note: this.noteText,
-      categoryId: this.category ?? 13
+      Amount: this.amount ?? 0,
+      SpentAt: this.spentAt.value,
+      Note: this.noteText,
+      CategoryId: this.category ?? 13
     }
     storedTransactions.push(newTransaction)
     localStorage.setItem('transactions', JSON.stringify(storedTransactions))

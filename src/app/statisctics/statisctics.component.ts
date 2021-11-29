@@ -19,6 +19,8 @@ export class StatiscticsComponent implements OnInit {
   polarChartLegend = true;
   lineChartType: ChartType = 'radar';
 
+  chartOptions: ChartOptions = {}
+
   chartDataSet: ChartDataSets[] = [];
 
   chartDataLabels: Label[] = [];
@@ -27,6 +29,8 @@ export class StatiscticsComponent implements OnInit {
 
   }
 
+  labeledTransactions: any[] = [];
+
   ngOnInit(): void {
     this.categoriesMapping = this.apiFetcherService.getCategories()
     this.apiFetcherService.getStatistics().subscribe(rslt => {
@@ -34,9 +38,18 @@ export class StatiscticsComponent implements OnInit {
       this.chartDataSet = [{data: this.categorySummaries.map(x => x.Sum), label: 'Main'}];
       this.chartDataLabels = this.categorySummaries.map(x => this.categoriesMapping.filter(y => y.Id == x.CategoryId)[0].Name);
     });
-    /*this.apiFetcherService.getFilteredTransactions().subscribe(rslt => {
-      this.loadedTransactions = rslt
-    });*/
+    this.apiFetcherService.getFilteredTransactions().subscribe(rslt => {
+      this.loadedTransactions = rslt;
+      this.labeledTransactions = this.loadedTransactions.map(x => { 
+        return {
+          id: x.Id,
+          amount: x.Amount,
+          spentAt: x.SpentAt,
+          note: x.Note,
+          category: this.categoriesMapping.filter(y => y.Id == x.CategoryId)[0]
+        }
+      });
+    });
   }
 
 }
