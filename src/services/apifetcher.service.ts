@@ -42,6 +42,12 @@ export class ApifetcherService {
       }
     }))
   }
+  removeTransaction(id: number): Observable<Object>{
+    this.setToken()
+    return this.httpClient.delete(`${environment.apiUrl}/removetransaction`, {headers: this.headers, body: {
+      TransactionId: id
+    }})
+  }
   checkAuth(): Observable<Object> {
     this.setToken()
     return this.httpClient.get(`${environment.apiUrl}/checkauth`, {headers: this.headers});

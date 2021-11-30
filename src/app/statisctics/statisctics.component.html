@@ -18,16 +18,26 @@
                     <th mat-header-cell *matHeaderCellDef>Note</th>
                     <td mat-cell *matCellDef="let element">{{element.Note}}</td>
                 </ng-container>
-                <ng-container matColumnDef="edit-button">
+                <ng-container matColumnDef="otpions-button">
                     <th mat-header-cell *matHeaderCellDef></th>
                     <td mat-cell *matCellDef="let element">
-                        <button mat-icon-button>
+                        <button mat-icon-button #tooltip="matTooltip" [matMenuTriggerFor]="menu" matTooltip="Options">
                             <mat-icon>more_vert</mat-icon>
                         </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item>
+                                <mat-icon>edit</mat-icon>
+                                <span>Edit</span>
+                            </button>
+                            <button mat-menu-item style="color: red;" (click)="removeTransaction(element.Id)">
+                                <mat-icon style="color: red;">delete_forever</mat-icon>
+                                <span>Delete</span>
+                            </button>
+                        </mat-menu>
                     </td>
                 </ng-container>
-                <tr mat-header-row *matHeaderRowDef="['amount', 'spentAt', 'category', 'note', 'edit-button']"></tr>
-                <tr mat-row *matRowDef="let row; columns: ['amount', 'spentAt', 'category', 'note', 'edit-button'];"></tr>
+                <tr mat-header-row *matHeaderRowDef="['amount', 'spentAt', 'category', 'note', 'otpions-button']"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['amount', 'spentAt', 'category', 'note', 'otpions-button'];"></tr>
             </table>
         </ng-template>
     </mat-tab>

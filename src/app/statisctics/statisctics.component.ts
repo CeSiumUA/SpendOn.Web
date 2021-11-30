@@ -5,6 +5,7 @@ import { CategoryStat, Category } from '../../models/category';
 import { ChartData, ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label, SingleDataSet } from 'ng2-charts';
 import { map } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-statisctics',
@@ -26,7 +27,7 @@ export class StatiscticsComponent implements OnInit {
 
   chartDataLabels: Label[] = [];
 
-  constructor(private apiFetcherService: ApifetcherService) {
+  constructor(private apiFetcherService: ApifetcherService, private matSnackBar: MatSnackBar) {
 
   }
 
@@ -52,4 +53,11 @@ export class StatiscticsComponent implements OnInit {
     });
   }
 
+  removeTransaction(id: number): void {
+    this.apiFetcherService.removeTransaction(id).subscribe(result => {
+      this.matSnackBar.open('Transaction removed successfully!');
+    }, err => {
+      this.matSnackBar.open('Failed to remove transaction!')
+    });
+  }
 }
