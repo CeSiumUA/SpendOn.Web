@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -17,6 +17,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddTransactionDialogComponent } from './dialogs/add.transaction.dialog/add.transaction.dialog.component';
 import { StatiscticsComponent } from './statisctics/statisctics.component';
 import { ChartsModule } from 'ng2-charts';
+import localeUa from '@angular/common/locales/ru';
+import { registerLocaleData } from '@angular/common';
+registerLocaleData(localeUa, 'ru-RU');
 
 @NgModule({
   declarations: [
@@ -42,7 +45,10 @@ import { ChartsModule } from 'ng2-charts';
       registrationStrategy: 'registerWhenStable:30000'
     })
   ],
-  providers: [ApifetcherService],
+  providers: [ApifetcherService, {
+    provide: LOCALE_ID,
+    useValue: 'ru-RU' // 'de-DE' for Germany, 'fr-FR' for France ...
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

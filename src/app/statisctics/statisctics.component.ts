@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ApifetcherService } from '../../services/apifetcher.service';
-import { StoredTransactionModel } from '../../models/stored.transaction';
+import { StoredTransactionModel, DisplayTransactonModel } from '../../models/stored.transaction';
 import { CategoryStat, Category } from '../../models/category';
 import { ChartData, ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label, SingleDataSet } from 'ng2-charts';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-statisctics',
@@ -12,7 +13,7 @@ import { Color, Label, SingleDataSet } from 'ng2-charts';
 })
 export class StatiscticsComponent implements OnInit {
 
-  loadedTransactions: StoredTransactionModel[] = [];
+  loadedTransactions: DisplayTransactonModel[] = [];
   categorySummaries: CategoryStat[] = [];
   categoriesMapping: Category[] = [];
 
@@ -29,8 +30,6 @@ export class StatiscticsComponent implements OnInit {
 
   }
 
-  labeledTransactions: any[] = [];
-
   ngOnInit(): void {
     this.categoriesMapping = this.apiFetcherService.getCategories()
     this.apiFetcherService.getStatistics().subscribe(rslt => {
@@ -39,14 +38,15 @@ export class StatiscticsComponent implements OnInit {
       this.chartDataLabels = this.categorySummaries.map(x => this.categoriesMapping.filter(y => y.Id == x.CategoryId)[0].Name);
     });
     this.apiFetcherService.getFilteredTransactions().subscribe(rslt => {
-      this.loadedTransactions = rslt;
-      this.labeledTransactions = this.loadedTransactions.map(x => { 
+      const arr: DisplayTransactonModel[] = rslt;
+      this.loadedTransactions = arr.map(x => {
         return {
-          id: x.Id,
-          amount: x.Amount,
-          spentAt: x.SpentAt,
-          note: x.Note,
-          category: this.categoriesMapping.filter(y => y.Id == x.CategoryId)[0]
+          Id: x.Id,
+          Amount: x.Amount,
+          SpentAt: x.SpentAt,
+          Note: x.Note,
+          CategoryId: x.CategoryId,
+          CategoryName: this.categoriesMapping.filter(y => y.Id == x.CategoryId)[0].Name
         }
       });
     });

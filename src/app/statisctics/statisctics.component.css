@@ -2,3 +2,11 @@
     display: block;
     background-color: white;
 }
+
+.hidden-button {
+    display: none;
+}
+
+.hover-div:hover + .hidden-button {
+    display: block;
+}

@@ -1,17 +1,33 @@
 <mat-tab-group>
     <mat-tab label="Table">
         <ng-template matTabContent>
-            <table mat-table [dataSource]="labeledTransactions" style="width: 100%;">
+            <table mat-table [dataSource]="loadedTransactions" style="width: 100%;">
                 <ng-container matColumnDef="amount">
                     <th mat-header-cell *matHeaderCellDef>Amount</th>
-                    <td mat-cell *matCellDef="let element">{{element.amount}}</td>
+                    <td mat-cell *matCellDef="let element">{{element.Amount | currency: 'UAH':true}}</td>
                 </ng-container>
                 <ng-container matColumnDef="spentAt">
                     <th mat-header-cell *matHeaderCellDef>Time</th>
-                    <td mat-cell *matCellDef="let element">{{element.spentAt}}</td>
+                    <td mat-cell *matCellDef="let element"><small>{{element.SpentAt}}</small></td>
                 </ng-container>
-                <tr mat-header-row *matHeaderRowDef="['amount', 'spentAt']"></tr>
-                <tr mat-row *matRowDef="let row; columns: ['amount', 'spentAt'];"></tr>
+                <ng-container matColumnDef="category">
+                    <th mat-header-cell *matHeaderCellDef>Category</th>
+                    <td mat-cell *matCellDef="let element">{{element.CategoryName}}</td>
+                </ng-container>
+                <ng-container matColumnDef="note">
+                    <th mat-header-cell *matHeaderCellDef>Note</th>
+                    <td mat-cell *matCellDef="let element">{{element.Note}}</td>
+                </ng-container>
+                <ng-container matColumnDef="edit-button">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button>
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="['amount', 'spentAt', 'category', 'note', 'edit-button']"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['amount', 'spentAt', 'category', 'note', 'edit-button'];"></tr>
             </table>
         </ng-template>
     </mat-tab>
