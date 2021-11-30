@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ApifetcherService } from '../../services/apifetcher.service';
 import { StoredTransactionModel, DisplayTransactonModel } from '../../models/stored.transaction';
 import { CategoryStat, Category } from '../../models/category';
@@ -6,6 +6,9 @@ import { ChartData, ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label, SingleDataSet } from 'ng2-charts';
 import { map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PagedTransactions } from '../../models/paged.transactions';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-statisctics',
@@ -21,6 +24,12 @@ export class StatiscticsComponent implements OnInit {
   polarChartLegend = true;
   lineChartType: ChartType = 'radar';
 
+  currentPageNumber: number = 0;
+
+  itemsPerPage: number = 10;
+
+  itemsCount: number = 0;
+
   chartOptions: ChartOptions = {}
 
   chartDataSet: ChartDataSets[] = [];
@@ -31,16 +40,17 @@ export class StatiscticsComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-    this.categoriesMapping = this.apiFetcherService.getCategories()
-    this.apiFetcherService.getStatistics().subscribe(rslt => {
-      this.categorySummaries = rslt;
-      this.chartDataSet = [{data: this.categorySummaries.map(x => x.Sum), label: 'Main'}];
-      this.chartDataLabels = this.categorySummaries.map(x => this.categoriesMapping.filter(y => y.Id == x.CategoryId)[0].Name);
-    });
-    this.apiFetcherService.getFilteredTransactions().subscribe(rslt => {
-      const arr: DisplayTransactonModel[] = rslt;
-      this.loadedTransactions = arr.map(x => {
+  pageChangedHandler(event?: PageEvent){
+    if(event){
+      this.fetchTransactions(event.pageIndex, event.pageSize)
+    }
+  }
+
+  fetchTransactions(pageNumber: number, items: number){
+    this.apiFetcherService.getFilteredTransactions(pageNumber, items).subscribe(rslt => {
+      const pagedTransactions: PagedTransactions = rslt;
+      this.itemsCount = pagedTransactions.Count
+      this.loadedTransactions = pagedTransactions.Transactions.map(x => {
         return {
           Id: x.Id,
           Amount: x.Amount,
@@ -51,6 +61,16 @@ export class StatiscticsComponent implements OnInit {
         }
       });
     });
+  }
+
+  ngOnInit(): void {
+    this.categoriesMapping = this.apiFetcherService.getCategories()
+    this.apiFetcherService.getStatistics().subscribe(rslt => {
+      this.categorySummaries = rslt;
+      this.chartDataSet = [{data: this.categorySummaries.map(x => x.Sum), label: 'Main'}];
+      this.chartDataLabels = this.categorySummaries.map(x => this.categoriesMapping.filter(y => y.Id == x.CategoryId)[0].Name);
+    });
+    this.fetchTransactions(this.currentPageNumber, this.itemsPerPage)
   }
 
   removeTransaction(id: number): void {

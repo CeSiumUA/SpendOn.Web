@@ -8,7 +8,7 @@
                 </ng-container>
                 <ng-container matColumnDef="spentAt">
                     <th mat-header-cell *matHeaderCellDef>Time</th>
-                    <td mat-cell *matCellDef="let element"><small>{{element.SpentAt}}</small></td>
+                    <td mat-cell *matCellDef="let element"><small>{{element.SpentAt | date}}</small></td>
                 </ng-container>
                 <ng-container matColumnDef="category">
                     <th mat-header-cell *matHeaderCellDef>Category</th>
@@ -39,6 +39,7 @@
                 <tr mat-header-row *matHeaderRowDef="['amount', 'spentAt', 'category', 'note', 'otpions-button']"></tr>
                 <tr mat-row *matRowDef="let row; columns: ['amount', 'spentAt', 'category', 'note', 'otpions-button'];"></tr>
             </table>
+            <mat-paginator [length]="itemsCount" [pageIndex]="currentPageNumber" (page)="pageChangedHandler($event)" [pageSize]="itemsPerPage"></mat-paginator>
         </ng-template>
     </mat-tab>
     <mat-tab label="Chart">

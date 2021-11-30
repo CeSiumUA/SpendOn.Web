@@ -61,9 +61,12 @@ export class ApifetcherService {
     const transactions: AddTransactionModel[] = JSON.parse(localStorage.getItem('transactions') ?? '[]')
     return this.bulkAddTransactions(transactions)
   }
-  getFilteredTransactions(): Observable<any> {
+  getFilteredTransactions(pageNumber: number, pagination: number): Observable<any> {
     this.setToken()
-    return this.httpClient.post(`${environment.apiUrl}/fetchtransactions`, {}, {headers: this.headers})
+    return this.httpClient.post(`${environment.apiUrl}/fetchtransactions`, {
+      "PageNumber": pageNumber,
+      "Pagination": pagination
+    }, {headers: this.headers})
   }
   getStatistics(): Observable<any> {
     this.setToken()
