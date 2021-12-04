@@ -70,9 +70,9 @@ export class ApifetcherService {
       "Filters": filters
     }, {headers: this.headers})
   }
-  getStatistics(): Observable<any> {
+  getStatistics(filters: Filter[]): Observable<any> {
     this.setToken()
-    return this.httpClient.post(`${environment.apiUrl}/getcategoriesstats`, {}, { headers: this.headers })
+    return this.httpClient.post(`${environment.apiUrl}/getcategoriesstats`, filters, { headers: this.headers })
   }
   getFilterSettings(): Observable<FilterSettings> {
     return this.httpClient.get<FilterSettings>(`${environment.apiUrl}/getfiltersettings`, { headers: this.headers }).pipe(map((x) => {

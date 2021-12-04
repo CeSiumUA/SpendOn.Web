@@ -9,7 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PagedTransactions } from '../../models/paged.transactions';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { FilterSettings, Sign, Field, FilterSelector, Filter } from '../../models/filters';
+import { FilterSettings, Filter } from '../../models/filters';
 
 @Component({
   selector: 'app-statisctics',
@@ -95,6 +95,7 @@ export class StatiscticsComponent implements OnInit {
       }
       this.currentFilters.push(newFilter)
       this.fetchTransactions(this.currentPageNumber, this.itemsPerPage)
+      this.getStats()
       this.fieldIndex = undefined;
       this.filterValue = undefined;
       this.signIndex = undefined;
@@ -107,20 +108,25 @@ export class StatiscticsComponent implements OnInit {
       this.currentFilters.splice(indexToRemove, 1)
     }
     this.fetchTransactions(this.currentPageNumber, this.itemsPerPage)
+    this.getStats()
   }
 
   ngOnInit(): void {
     this.categoriesMapping = this.apiFetcherService.getCategories()
-    this.apiFetcherService.getStatistics().subscribe(rslt => {
-      this.categorySummaries = rslt;
-      this.chartDataSet = [{data: this.categorySummaries.map(x => x.Sum), label: 'Main'}];
-      this.chartDataLabels = this.categorySummaries.map(x => this.categoriesMapping.filter(y => y.Id == x.CategoryId)[0].Name);
-    });
+    this.getStats();
     this.fetchTransactions(this.currentPageNumber, this.itemsPerPage)
     this.apiFetcherService.getFilterSettings().subscribe(result => {
       this.filterSettings = result
     }, err => {
       this.filterSettings = JSON.parse(localStorage.getItem('filtersettings') ?? '{}')
+    });
+  }
+
+  getStats(): void {
+    this.apiFetcherService.getStatistics(this.currentFilters).subscribe(rslt => {
+      this.categorySummaries = rslt;
+      this.chartDataSet = [{data: this.categorySummaries.map(x => x.Sum), label: 'Main'}];
+      this.chartDataLabels = this.categorySummaries.map(x => this.categoriesMapping.filter(y => y.Id == x.CategoryId)[0].Name);
     });
   }
 
