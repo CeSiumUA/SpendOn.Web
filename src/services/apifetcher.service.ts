@@ -2,7 +2,7 @@ import { environment } from './../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Category } from '../models/category';
-import { LoginRequest } from '../models/login.request';
+import { LoginRequest, RegisterRequest } from '../models/login.request';
 import { empty, Observable, of } from 'rxjs';
 import { AuthToken } from '../models/auth.token';
 import { map, catchError } from 'rxjs/operators';
@@ -38,6 +38,13 @@ export class ApifetcherService {
   }
   login(loginRequest: LoginRequest): Observable<void> {
     return this.httpClient.post(`${environment.apiUrl}/login`, loginRequest, {headers: this.headers}).pipe(map((data: any, index: number) => {
+      if(data !== null && data !== undefined){
+        localStorage.setItem('authToken', JSON.stringify(data))
+      }
+    }))
+  }
+  register(registerRequest: RegisterRequest): Observable<void> {
+    return this.httpClient.post(`${environment.apiUrl}/register`, registerRequest, {headers: this.headers}).pipe(map((data: any, index: number) => {
       if(data !== null && data !== undefined){
         localStorage.setItem('authToken', JSON.stringify(data))
       }
