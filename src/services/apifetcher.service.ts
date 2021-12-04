@@ -3,11 +3,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Category } from '../models/category';
 import { LoginRequest } from '../models/login.request';
-import { Observable, of } from 'rxjs';
+import { empty, Observable, of } from 'rxjs';
 import { AuthToken } from '../models/auth.token';
-import { map } from 'rxjs/operators'
+import { map, catchError } from 'rxjs/operators';
 import { AddTransactionModel } from '../models/add.transaction';
 import { StoredTransactionModel } from '../models/stored.transaction';
+import { Filter, FilterSettings } from '../models/filters';
 
 @Injectable({
   providedIn: 'root'
@@ -61,16 +62,23 @@ export class ApifetcherService {
     const transactions: AddTransactionModel[] = JSON.parse(localStorage.getItem('transactions') ?? '[]')
     return this.bulkAddTransactions(transactions)
   }
-  getFilteredTransactions(pageNumber: number, pagination: number): Observable<any> {
+  getFilteredTransactions(pageNumber: number, pagination: number, filters: Filter[]): Observable<any> {
     this.setToken()
     return this.httpClient.post(`${environment.apiUrl}/fetchtransactions`, {
       "PageNumber": pageNumber,
-      "Pagination": pagination
+      "Pagination": pagination,
+      "Filters": filters
     }, {headers: this.headers})
   }
   getStatistics(): Observable<any> {
     this.setToken()
     return this.httpClient.post(`${environment.apiUrl}/getcategoriesstats`, {}, { headers: this.headers })
+  }
+  getFilterSettings(): Observable<FilterSettings> {
+    return this.httpClient.get<FilterSettings>(`${environment.apiUrl}/getfiltersettings`, { headers: this.headers }).pipe(map((x) => {
+      localStorage.setItem('filtersettings', JSON.stringify(x))
+      return x;
+    }))
   }
   private setToken(): void{
     const localStorageValue = localStorage.getItem('authToken')

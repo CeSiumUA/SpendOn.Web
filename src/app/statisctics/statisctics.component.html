@@ -1,3 +1,47 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            Filters
+        </mat-panel-title>
+        <mat-panel-description>
+            <mat-icon>filter_list</mat-icon>
+          </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-card>
+        <mat-form-field style="width: 100px">
+            <mat-label>Field</mat-label>
+            <mat-select [(ngModel)]="fieldIndex">
+                <mat-option *ngFor="let field of filterSettings.Fields" [value]="field.index">
+                    {{field.value}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field style="width: 100px">
+            <mat-label>Sign</mat-label>
+            <mat-select [(ngModel)]="signIndex">
+                <mat-option *ngFor="let sign of filterSettings.Signs" [value]="sign.index">
+                    {{sign.value}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Value</mat-label>
+            <input matInput type="text" [(ngModel)]="filterValue">
+        </mat-form-field>
+        <button color="accent" mat-button (click)="applyFilter()">Add</button>
+    </mat-card>
+    <mat-form-field style="width: 100%;">
+        <mat-label>Active filters</mat-label>
+        <mat-chip-list #chipList>
+            <mat-chip *ngFor="let filter of currentFilters" [removable]="true" (removed)="removeFilter(filter)">
+                {{convertPropertyToField(filter.Property)}} {{convertOperatorToSign(filter.Operator)}} {{filter.Value}}
+                <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+            </mat-chip>
+        </mat-chip-list>
+    </mat-form-field>
+</mat-expansion-panel>
 <mat-tab-group>
     <mat-tab label="Table">
         <ng-template matTabContent>
